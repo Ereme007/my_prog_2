@@ -66,11 +66,36 @@ import .Module_Edge as m_edge
 include("Module_Plots.jl")
 import .Module_Plots as m_plots
 
+
+using Plots
+Ref_QRS_dur=[94, 94, 94, 100, 100, 100, 100, 100, 56, 56, 56, 56, 56, 56, 36, 36, 100, 100, 100]
+Ref_QRS_start=[1, 1, 134, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 NUMBER = 3
-BaseName3, N3 = "CSE", NUMBER
+#BaseName3, N3 = "CSE", NUMBER
+BaseName3, N3 = "CTS", NUMBER
 Names_files3, signals_channel3, const_signal3,  Frequency3, koef3, Ref_qrs3, Ref_P3, start_signal3, end_signal3 = m_get_signal.Signal_all_channels(BaseName3, N3)
 Ref_qrs3
 b=copy(Ref_qrs3[3:34])
+
+plot(signals_channel3[1][(Ref_QRS_start[NUMBER]):(Ref_QRS_start[NUMBER]+Ref_QRS[NUMBER])])
+
+signals_channel3[1][(Ref_QRS_start[NUMBER]):(Ref_QRS_start[NUMBER]+Ref_QRS[NUMBER])]
+
+
+
+
+
+
+
+
+
+b
+using Plots
+plot(signals_channel3[1])
+plot!(const_signal3[1])
+vline!(301 , color = :green)
+b[3]
+b[5]
 
 Ref_P3
 Massiv_Amp_all_channels3, Massiv_Points_channel3 = m_fronts.Defenition_Fronts(signals_channel3, Frequency3, Ref_qrs3)
@@ -115,3 +140,35 @@ Massiv_Amp_all_channels3[12][2]
 Massiv_Amp_all_channels3[12][2][1] - sort(n[12][2])[1][1]
 
 plot(const_signal3[12])
+
+
+using JLD2
+
+A = randn(5,5)
+
+b = randn(5)
+
+str = "hello world"
+
+@save "example.jld2" A b str
+
+@load "example.jld2" A b str
+
+str
+
+@save "Templates.jld2" A b str
+
+
+
+function Deleted_same_v(vect)
+    N = length(vect)
+    All_vec = []
+    push!(All_vec, vec[1])
+    
+    for i in 1:N-1
+        for j in i:N
+            if (vec[i] != vect[j])
+                push!(All_vec, vect[j])
+        end
+    end
+end
