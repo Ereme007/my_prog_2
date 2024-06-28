@@ -264,15 +264,15 @@ More_Templates_CTS_RSR
 using Plots, JLD2
 #include("../Module_Get_Signal.jl")
 include("Module_Signal.jl")
-include("function_DTW.jl")
+#include("function_DTW.jl")
 import .Module_Signal as m_signal
-@load "src/templates_CTS.jld2" Templates_CTS_Q Templates_CTS_QR Templates_CTS_QRS Templates_CTS_RS Templates_CTS_RSR Templates_CTS_R
-@load "src/templates_CTS_scope.jld2" scope_Templates_CTS_Q scope_Templates_CTS_QR scope_Templates_CTS_QRS scope_Templates_CTS_RS scope_Templates_CTS_RSR scope_Templates_CTS_R #Это не обязательно, достаточно применить 2 функции scope(Zeros_signal("TEMPLATES"))
+@load "src/Templates/templates_CTS.jld2" Templates_CTS_Q Templates_CTS_QR Templates_CTS_QRS Templates_CTS_RS Templates_CTS_RSR Templates_CTS_R
+@load "src/Templates/templates_CTS_scope.jld2" scope_Templates_CTS_Q scope_Templates_CTS_QR scope_Templates_CTS_QRS scope_Templates_CTS_RS scope_Templates_CTS_RSR scope_Templates_CTS_R #Это не обязательно, достаточно применить 2 функции scope(Zeros_signal("TEMPLATES"))
 #QRS_start_CTS = [181, 225, 135, 180, 180, 180, 180, 130, 180, 180, 180, 180, 180, 180, 180, 130, 180, 180]
 #QRS_dur_CTS = [94, 94,94,100,100,100,100,100,56,56,56,56,56,56,36,36,100,100]
 #@save "src/QRS_start_and_dur_for_CTS.jld2" QRS_start_CTS QRS_dur_CTS
-@load "src/QRS_start_and_dur_for_CTS.jld2" QRS_start_CTS QRS_dur_CTS
-@load "src/scope_More_Templates_CTS.jld2" scope_More_Templates_CTS_Q scope_More_Templates_CTS_QR scope_More_Templates_CTS_QRS scope_More_Templates_CTS_RS scope_More_Templates_CTS_RSR scope_More_Templates_CTS_R
+@load "src/Templates/QRS_start_and_dur_for_CTS.jld2" QRS_start_CTS QRS_dur_CTS
+@load "src/Templates/scope_More_Templates_CTS.jld2" scope_More_Templates_CTS_Q scope_More_Templates_CTS_QR scope_More_Templates_CTS_QRS scope_More_Templates_CTS_RS scope_More_Templates_CTS_RSR scope_More_Templates_CTS_R
 
 plotly()
 
@@ -322,6 +322,6 @@ plot_templates(scope_More_Templates_CTS_Q, scope_More_Templates_CTS_R, scope_Mor
 Signal
 plot(Signal)
 
-res, all = m_signal.Result_DTW(6, scope(Zeros_signal(Signal)), scope_More_Templates_CTS_Q, scope_More_Templates_CTS_R, scope_More_Templates_CTS_QR, scope_More_Templates_CTS_QRS, scope_More_Templates_CTS_RS, scope_More_Templates_CTS_RSR)
+res, all = m_signal.Result_DTW(6, m_signal.scope(m_signal.Zeros_signal(Signal)), scope_More_Templates_CTS_Q, scope_More_Templates_CTS_R, scope_More_Templates_CTS_QR, scope_More_Templates_CTS_QRS, scope_More_Templates_CTS_RS, scope_More_Templates_CTS_RSR)
 res
 all
