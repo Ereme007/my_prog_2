@@ -148,39 +148,7 @@ module Module_Signal
     end
 
     
-    using Distances, DynamicAxisWarping
-#Q, R, QR, QRS, RS, RSR
-function DTW_kNN(Signal, k, Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)
 
-    temps = []
-    for i in 1:length(Templates_RS) #new_Templates_RS new_Templates_RSR new_Templates_QR new_Templates_QRS new_Templates_R new_Templates_Q
-        Templates = Templates_RS[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "RS"))
-    end
-    for i in 1:length(Templates_RSR) 
-        Templates = Templates_RSR[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "RSR"))
-    end
-    for i in 1:length(Templates_QR) 
-        Templates = Templates_QR[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "QR"))
-    end
-    for i in 1:length(Templates_QRS) 
-        Templates = Templates_QRS[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "QRS"))
-    end
-    for i in 1:length(Templates_R) 
-        Templates = Templates_R[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "R"))
-    end
-    for i in 1:length(Templates_Q) 
-        Templates = Templates_Q[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "Q"))
-    end
-    temps_sort = sort!(temps, by = x -> x[1]);
-
-    return temps_sort[1:k]
-end
 #Нормировка размаха к 1000 единицам
 function scope(Sig)
     minim, maxim = extrema(Sig)
@@ -195,11 +163,7 @@ function Zeros_signal(all_si)
 return all_si
 end
 
-    function Result_DTW(k, Signal, Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)
-        #Result = DTW_kNN(scope(Zeros_signal(Signal)), k, Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)
-        Result = DTW_kNN(Signal, k, Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)
-        return Result[1][2], Result 
-    end
+
 
     export  Signal_all_channels, Result_DTW, Zeros_signal, scope
 end
