@@ -29,5 +29,5 @@ end
 
 # function Result_DTW(k, Signal, Q, R, QR, QRS, RS, RSR)
 Channel, K = 1, 3
-ResultDTW, _ = dtw.Result_DTW(K, signals_channel[Channel][Ref_qrs[1]:Ref_qrs[2]], Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)
+ResultDTW, _ = dtw.Result_DTW(K, rd.scope(rd.Zeros_signal(signals_channel[Channel][Ref_qrs[1]:Ref_qrs[2]])), Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)
 ResultDTW

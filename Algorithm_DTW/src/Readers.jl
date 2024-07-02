@@ -1,7 +1,7 @@
 module Readers
     # using Dates, CSV, DataFrames, TOML #, FileUtils
     using JLD2
-    
+    @load "Algorithm_DTW/src/Templates/QRS_start_and_dur_for_CTS.jld2" QRS_start_CTS QRS_dur_CTS
     """
     чтение hdr-файла заголовка
     """
@@ -258,8 +258,12 @@ module Readers
         signals_channel = Sign_Channel(Signal)
 
         #Референтная разметка QRS
-        Ref_qrs = All_Ref_QRS(signals_channel[1], start_qrs, end_qrs, start_signal, end_signal)
-
+        if BaseName == "CTS"
+            Ref_qrs = [QRS_start_CTS[N], QRS_start_CTS[N]+QRS_dur_CTS[N]]
+        else 
+        
+            Ref_qrs = All_Ref_QRS(signals_channel[1], start_qrs, end_qrs, start_signal, end_signal)
+        end
 
         return Names_files, signals_channel, Frequency, Ref_qrs#, Ref_P, start_signal, end_signal
     end
