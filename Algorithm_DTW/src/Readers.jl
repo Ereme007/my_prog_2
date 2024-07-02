@@ -406,12 +406,14 @@ function DTW_kNN(Signal, k, Templates_Q, Templates_R, Templates_QR, Templates_QR
 
     return temps_sort[1:k]
 end
+
 #Нормировка размаха к 1000 единицам
 function scope(Sig)
     minim, maxim = extrema(Sig)
     koeff = (maxim - minim)/1000
     Sig = (Sig ./ koeff)
 end
+
 #Нулевой уровенеь сигнала
 function Zeros_signal(all_si)
     if all_si[1] != 0
@@ -419,5 +421,11 @@ function Zeros_signal(all_si)
     end
 return all_si
 end
-    export Signal_all_channels, Zeros_signal, scope
+
+#Обработка сигнала (нормировка и нудево уровень)
+function Processing_Signal(Signal)
+    return scope(Zeros_signal(Signal))
+end
+
+    export Signal_all_channels, Processing_Signal
 end

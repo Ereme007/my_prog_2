@@ -1,7 +1,7 @@
 module DTWfunc
     using Distances, DynamicAxisWarping
     
-    function Result_DTW(k, Signal, Q, R, QR, QRS, RS, RSR)
+    function Result_DTW( Signal,k, Q, R, QR, QRS, RS, RSR)
         Result = DTW_kNN(Signal, k, Q, R, QR, QRS, RS, RSR)
        
         return Result[1][2], Result 
