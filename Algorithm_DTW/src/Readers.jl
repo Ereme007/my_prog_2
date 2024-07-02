@@ -1,25 +1,6 @@
 module Readers
     # using Dates, CSV, DataFrames, TOML #, FileUtils
-    
-    
-    """
-    словарь с кодировками типов, которые используются в hdr-файлах
-    """
-    const string2datatype = Dict{String, DataType}(
-        "int8"    => Int8,
-        "uint8"   => UInt8,
-        "int16"   => Int16,
-        "uint16"  => UInt16,
-        "int32"   => Int32,
-        "uint32"  => UInt32,
-        "int64"   => Int64,
-        "uint64"  => UInt64,
-        "float"   => Float32,
-        "float32" => Float32,
-        "double"  => Float64,
-        "float64" => Float64,
-        "string" => String
-    )
+    using JLD2
     
     """
     чтение hdr-файла заголовка
@@ -267,14 +248,11 @@ module Readers
         Names_files, Signal, Frequency, Ref_File = Read_Signal(BaseName, N)
         Const = map(copy, Signal)
         #_, Const, _, _ = Read_Signal(BaseName, N)
-        #Дополнительные параметры
-        koef  = 1000/Frequency
         Referents_by_File = _read_ref(N)
         start_qrs = floor(Int64, Ref_File.QRS_onset) #начало комплекса QRS (INT)
         end_qrs = floor(Int64, Ref_File.QRS_end)
         start_signal = floor(Int64, Referents_by_File.ibeg) #в Ref_File нет поля начала и конца сигнала(ibeg)
         end_signal = floor(Int64,  Referents_by_File.iend) #в Ref_File нет поля начала и конца сигнала(iend)
-        Const_Signal = Sign_Channel(Const)
 
         #Сигнал в виде массива
         signals_channel = Sign_Channel(Signal)
@@ -283,7 +261,7 @@ module Readers
         Ref_qrs = All_Ref_QRS(signals_channel[1], start_qrs, end_qrs, start_signal, end_signal)
 
 
-        return Names_files, signals_channel, Const_Signal, Frequency, koef, Ref_qrs#, Ref_P, start_signal, end_signal
+        return Names_files, signals_channel, Frequency, Ref_qrs#, Ref_P, start_signal, end_signal
     end
 
         #Второстепенные функции
@@ -437,13 +415,5 @@ function Zeros_signal(all_si)
     end
 return all_si
 end
-
-    function Result_DTW(k, Signal, Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)
-        #Result = DTW_kNN(scope(Zeros_signal(Signal)), k, Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)
-        Result = DTW_kNN(Signal, k, Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)
-        return Result[1][2], Result 
-    end
-
-
     export Signal_all_channels, Zeros_signal, scope
 end

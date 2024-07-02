@@ -1,0 +1,7 @@
+#Отрисовка шаблонов БЕЗ обработки
+plot_templates(Templates_CTS_Q, Templates_CTS_R, Templates_CTS_QR, Templates_CTS_QRS, Templates_CTS_RS, Templates_CTS_RSR)
+
+#Отрисовка шаблонов с обработкой
+plot_templates(scope_Templates_CTS_Q, scope_Templates_CTS_R, scope_Templates_CTS_QR, scope_Templates_CTS_QRS, scope_Templates_CTS_RS, scope_Templates_CTS_RSR)
+
+plot_templates(scope_More_Templates_CTS_Q, scope_More_Templates_CTS_R, scope_More_Templates_CTS_QR, scope_More_Templates_CTS_QRS, scope_More_Templates_CTS_RS, scope_More_Templates_CTS_RSR)
