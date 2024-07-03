@@ -1,7 +1,7 @@
 module Readers
     # using Dates, CSV, DataFrames, TOML #, FileUtils
     using JLD2
-    @load "Algorithm_DTW/src/Templates/QRS_start_and_dur_for_CTS.jld2" QRS_start_CTS QRS_dur_CTS
+    @load "src/Templates/QRS_start_and_dur_for_CTS.jld2" QRS_start_CTS QRS_dur_CTS
     """
     чтение hdr-файла заголовка
     """
@@ -385,6 +385,7 @@ module Readers
         minim, maxim = extrema(Sig)
         koeff = (maxim - minim)/1000
         Sig = (Sig ./ koeff)
+        return Sig 
     end
 
     """

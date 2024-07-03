@@ -9,6 +9,7 @@ module DTWfunc
         return Result[1][2], Result 
     end
     
+    #сделать набор шаблонов. Использрвать map()
     #порядок шаблонов: Q, R, QR, QRS, RS, RSR. Сигнал сами передаём (с/без предобработки)
     function DTW_kNN(Signal, k, Q, R, QR, QRS, RS, RSR)
 

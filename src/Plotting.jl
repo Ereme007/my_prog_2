@@ -12,7 +12,7 @@ module Plotting
     Отрисовка шаблонов
     """
     #Q, R, QR, QRS, RS, RSR
-    function plot_templates(Q, R, QR, QRS, RS, RSR)
+    function plot_templates(Q, QR, QRS, RS, RSR, R)
         plot_Q = plot(Q, title = "Q")
         plot_QR = plot(QR, title = "QR")
         plot_QRS = plot(QRS, title = "QRS")
@@ -120,7 +120,7 @@ module Plotting
          _10 = Ten_ch,
          _11 = Eleven_ch,
          _12 = Twelve_ch)
-        CSV.write("Algorithm_DTW/scripts/Stats/$(name).csv", text, delim = ';')
+        CSV.write("scripts/Stats/$(name).csv", text, delim = ';')
         end
     end
 
