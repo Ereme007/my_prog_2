@@ -239,10 +239,11 @@ module Readers
     
     using CSV, DataFrames, Dates
     
-    #Главная функция 
-    #Сигналс характиристиками 
-    #Вход: Наименование базы данных(BaseName), номер (N)
-    #Выход: Имя, сигнал, частота, коефф, референтная разметка qrs, референтная разметка p
+   """
+    Сигнал с характиристиками 
+    Вход: Наименование базы данных(BaseName), номер (N)
+    Выход: Имя, сигнал, частота, референтная разметка qrs
+    """
     function Signal_all_channels(BaseName, N)
         #Сигнал (имя, сигнал, частота, вся референтная рамзетка)
         Names_files, Signal, Frequency, Ref_File = Read_Signal(BaseName, N)
@@ -265,13 +266,13 @@ module Readers
             Ref_qrs = All_Ref_QRS(signals_channel[1], start_qrs, end_qrs, start_signal, end_signal)
         end
 
-        return Names_files, signals_channel, Frequency, Ref_qrs#, Ref_P, start_signal, end_signal
+        return Names_files, signals_channel, Frequency, Ref_qrs
     end
-
-        #Второстепенные функции
-        #Функция, которая говорит расположение расположение той или иной базы данных
-    #Вход - имя базы данных (пример "CSE")
-    #Выход - кортеж имен для данной базы данных(allbinfiles), Путь к базе данных(raw_base_data)
+    """
+    Функция, которая говорит расположение расположение той или иной базы данных
+    Вход - имя базы данных (пример "CSE" "CTS")
+    Выход - кортеж имен для данной базы данных(allbinfiles), путь к базе данных(raw_base_data)
+    """
     function Position_Data_Base(Type_Data_base)
         if (Type_Data_base == "CSE")
             raw_base_data = Raw_CSE_MA_Data_Base_Incart # синтетические ЭКГ CSE_MA
@@ -286,10 +287,11 @@ module Readers
         return allbinfiles, raw_base_data 
     end
 
-
+    """
     #Референтная разметка для данной базы данных
     #Вход - имя базы данных ("CSE") наименование файла ("MA1_001")
     #Выход - Data_base (имя базы данных); ref_file (референтная разметка для данного файла); ref_all_file (референтная разметка для всех файлов); raw_ref (путь к референтной разметке)
+    """
     function Referent_Data_Base(Data_base, filename)
         if (Data_base == "CSE" || Data_base == "CTS")
             if(Data_base == "CSE")
@@ -312,10 +314,11 @@ module Readers
         end
     end
 
-
+    """
     #Функция считывания сигнала
-    #Вход - Имя базы данных BaseName (пример "CSE"), номер файла N(пример 12)
+    #Вход - Имя базы данных BaseName (пример "CSE" "CTS"), номер файла N
     #Выход - имя файла, сигнал, частота, референтная
+    """
     function Read_Signal(BaseName, N)
         #проверка на ошибок для Базы данных
         Names_files, Raw_Base_Date = Position_Data_Base(BaseName)
@@ -337,18 +340,21 @@ module Readers
 
         return Names_files[N], signals, fs, Ref_File
     end
-
+    
+    """
     #Функция записывает сигнал в 12 каналов
     #Вход: Структура сигнала (Signal)
-    #Выход: Массив, в которм 12 ячеек
+    #Выход: Массив, в которм 12 ячеек (отведений)
+    """
     function Sign_Channel(Signal)
         return [Signal.I, Signal.II, Signal.III, Signal.aVR, Signal.aVL, Signal.aVF, Signal.V1, Signal.V2, Signal.V3, Signal.V4, Signal.V5, Signal.V6]
     end
 
-
-    #Функция составления реферетной разметки для QRS
-    #На вход границы qrs и границы сигнала, на выход все рефенетнаые границы qrs 
-    #Верно только для искусственнного сигнала
+    """
+    Функция составления реферетной разметки для QRS
+    На вход границы QRS и границы сигнала, на выход все рефенетнаые границы QRS 
+    Верно только для искусственнного сигнала
+    """
     function All_Ref_QRS(signals, start_qrs, end_qrs, start_sig, end_sig)
         Distance = end_sig - start_sig
         dur_qrs = end_qrs - start_qrs
@@ -372,60 +378,32 @@ module Readers
         return All_ref_qrs
     end
 
-    
-    using Distances, DynamicAxisWarping
-#Q, R, QR, QRS, RS, RSR
-function DTW_kNN(Signal, k, Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)
+    """
+    Нормировка размаха к 1000 единицам
+    """
+    function scope(Sig)
+        minim, maxim = extrema(Sig)
+        koeff = (maxim - minim)/1000
+        Sig = (Sig ./ koeff)
+    end
 
-    temps = []
-    for i in 1:length(Templates_RS) #new_Templates_RS new_Templates_RSR new_Templates_QR new_Templates_QRS new_Templates_R new_Templates_Q
-        Templates = Templates_RS[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "RS"))
+    """
+    Нулевой уровенеь сигнала
+    """
+    function Zeros_signal(all_si)
+        if all_si[1] != 0
+            all_si = (all_si .- (all_si[1]))
+        end
+        
+        return all_si
     end
-    for i in 1:length(Templates_RSR) 
-        Templates = Templates_RSR[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "RSR"))
-    end
-    for i in 1:length(Templates_QR) 
-        Templates = Templates_QR[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "QR"))
-    end
-    for i in 1:length(Templates_QRS) 
-        Templates = Templates_QRS[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "QRS"))
-    end
-    for i in 1:length(Templates_R) 
-        Templates = Templates_R[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "R"))
-    end
-    for i in 1:length(Templates_Q) 
-        Templates = Templates_Q[i]
-        push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "Q"))
-    end
-    temps_sort = sort!(temps, by = x -> x[1]);
 
-    return temps_sort[1:k]
-end
-
-#Нормировка размаха к 1000 единицам
-function scope(Sig)
-    minim, maxim = extrema(Sig)
-    koeff = (maxim - minim)/1000
-    Sig = (Sig ./ koeff)
-end
-
-#Нулевой уровенеь сигнала
-function Zeros_signal(all_si)
-    if all_si[1] != 0
-        all_si = (all_si .- (all_si[1]))
+    """
+    #Обработка сигнала (нормировка и нулевой уровень)
+    """
+    function Processing_Signal(Signal)
+        return scope(Zeros_signal(Signal))
     end
-return all_si
-end
-
-#Обработка сигнала (нормировка и нудево уровень)
-function Processing_Signal(Signal)
-    return scope(Zeros_signal(Signal))
-end
 
     export Signal_all_channels, Processing_Signal
 end

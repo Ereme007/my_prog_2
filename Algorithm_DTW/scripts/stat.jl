@@ -9,6 +9,7 @@ import .Plotting as pl
 
 using JLD2, Plots
 plotly()
+
 #По одному шаблону на каждый класс, без изменений (CTS)
 @load "Algorithm_DTW/src/Templates/templates_CTS.jld2" Templates_CTS_Q Templates_CTS_QR Templates_CTS_QRS Templates_CTS_RS Templates_CTS_RSR Templates_CTS_R
 #По одному шаблону на каждый класс с одинаковым размахом, начинающиеся с нулевого уровня
@@ -46,7 +47,7 @@ Pr_Signal = rd.Processing_Signal(Signal)
 pl.plots_result(K, Signal, Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)
 
 #Изначальный сегмент сигнала БЕЗ обработки
-plot(Signal)
+plot(Signal, title = "Изначальный сигнал", label = false)
 
-#Сохраняем статистику (определён CSE база для 60ти сигналов по 12 отведений)
+#Сохраняем статистику (определён CSE база для 60ти сигналов по 12 отведений), первый параметр - имя файла. Сохраняется в папке Stats
 pl.Save_csv("Test1", K, Templates_Q, Templates_R, Templates_QR, Templates_QRS, Templates_RS, Templates_RSR)

@@ -4,6 +4,7 @@ import .Readers as rd
 include("../src/DTWfunc.jl")
 import .DTWfunc as dtw
 
+using JLD2
 #По одному шаблону на каждый класс, без изменений (CTS)
 @load "Algorithm_DTW/src/Templates/templates_CTS.jld2" Templates_CTS_Q Templates_CTS_QR Templates_CTS_QRS Templates_CTS_RS Templates_CTS_RSR Templates_CTS_R
 #По одному шаблону на каждый класс с одинаковым размахом, начинающиеся с нулевого уровня
@@ -25,8 +26,7 @@ BaseName, N = "CSE", 2 #имеем базы "CSE" и "CTS"
 #Определяем сигнал
 Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseName, N)
 
-
-# function Result_DTW( Signal, k,  Q, R, QR, QRS, RS, RSR)
+#function Result_DTW( Signal, k,  Q, R, QR, QRS, RS, RSR)
 Channel, K = 1, 3 #номер отведения и k-бижайших соседей для оценки
 
 #Сигнал БЕЗ преобразований

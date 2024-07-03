@@ -1,17 +1,19 @@
 module DTWfunc
     using Distances, DynamicAxisWarping
-    
-    function Result_DTW( Signal,k, Q, R, QR, QRS, RS, RSR)
+    """
+    Функция, определяющая принадлежность к классу (так же выводит классы, которые близки к исходному сигналу в порядке уменьшения схожести) 
+    """
+    function Result_DTW(Signal,k, Q, R, QR, QRS, RS, RSR)
         Result = DTW_kNN(Signal, k, Q, R, QR, QRS, RS, RSR)
        
         return Result[1][2], Result 
     end
-
-    #Q, R, QR, QRS, RS, RSR
+    
+    #порядок шаблонов: Q, R, QR, QRS, RS, RSR. Сигнал сами передаём (с/без предобработки)
     function DTW_kNN(Signal, k, Q, R, QR, QRS, RS, RSR)
 
         temps = []
-        for i in 1:length(RS) #new_Templates_RS new_Templates_RSR new_Templates_QR new_Templates_QRS new_Templates_R new_Templates_Q
+        for i in 1:length(RS)
             Templates = RS[i]
             push!(temps, (dtw(Signal, Templates, SqEuclidean(); transportcost = 1)[1], "RS"))
         end
