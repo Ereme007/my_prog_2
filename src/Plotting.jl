@@ -26,8 +26,13 @@ module Plotting
     """
     Отрисовка сиганла с сопостовлением для него класса
     """
-    function plots_result(K, Sig, Q, R, QR, QRS, RS, RSR)
-        Res, _ = dtw.Result_DTW(Sig, K, Q, R, QR, QRS, RS, RSR)
+    function plots_result(K, Sig, Q, QR, QRS, RS, RSR, R)
+        Res, _ = dtw.Result_DTW(Sig, K, Q, QR, QRS, RS, RSR, R)
+        plot(Sig, legend = false, title = Res)
+    end
+
+    function second_plots_result(K, Sig, Templates)
+        Res, _ = dtw.second_Result_DTW(Sig, K, Templates)
         plot(Sig, legend = false, title = Res)
     end
 
@@ -124,5 +129,5 @@ module Plotting
         end
     end
 
-    export plot_templates, plots_result, Save_csv
+    export plot_templates, plots_result, second_plots_result, Save_csv
 end

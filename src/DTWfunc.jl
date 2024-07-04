@@ -9,9 +9,15 @@ module DTWfunc
         return Result[1][2], Result 
     end
     
+    function second_Result_DTW(Signal, k, Templates)
+        Result = second_DTW_kNN(Signal, k, Templates)
+   
+        return Result[1][2], Result 
+    end
+
     #сделать набор шаблонов. Использрвать map()
     #порядок шаблонов: Q, R, QR, QRS, RS, RSR. Сигнал сами передаём (с/без предобработки)
-    function DTW_kNN(Signal, k, Q, R, QR, QRS, RS, RSR)
+    function DTW_kNN(Signal, k, Q, QR, QRS, RS, RSR, R)
 
         temps = []
         for i in 1:length(RS)
@@ -43,5 +49,18 @@ module DTWfunc
         return temps_sort[1:k]
     end
 
-    export Result_DTW
+    #сделать набор шаблонов. Использрвать map()
+    function second_DTW_kNN(Signal, k, Templates)
+        temps = []
+        
+        map(Templates) do fn
+            push!(temps, (dtw(Signal, fn.signal, SqEuclidean(); transportcost = 1)[1], fn.name))
+        end
+        
+        temps_sort = sort!(temps, by = x -> x[1]);
+
+        return temps_sort[1:k]
+    end
+
+    export Result_DTW, second_Result_DTW
 end
