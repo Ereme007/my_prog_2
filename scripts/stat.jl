@@ -56,7 +56,7 @@ ResultDTW2
 
 
 #Отрисовка классифицированного сигнала
-pl.second_plots_result(K, Signal, All_Templates)
+pl.plots_result(K, Signal, All_Templates)
 
 
 #Изначальный сегмент сигнала БЕЗ обработки
