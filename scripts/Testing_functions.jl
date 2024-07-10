@@ -117,3 +117,20 @@ RSR=[0, 0, 0, 0, 0, 1]
 
 #Сохраниеие оценки классификатора:
 #pl.Save_ref_test_csv("Test2_stats", Q, R, QR, QRS, RS, RSR)
+
+include("../src/Templates/QRS_true.jl")
+Tabel = zeros((2, 3))
+[горизонталь, вертикаль]
+M1 = 1
+M2 = 3
+Tabel[M1, M2] = Tabel[M1, M2] + 1
+typeof(Tabel[M1, M2])
+С = trunc(Int, (Tabel[M1, M2]))
+typeof(С)
+
+A = ["1", "4", "2", "3", "2"]
+
+C = "3"
+mm = findall(x->x==C, A)
+typeof(mm[1])
+trunc(Int, mm)
