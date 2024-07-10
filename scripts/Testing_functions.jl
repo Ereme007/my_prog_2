@@ -119,7 +119,8 @@ RSR=[0, 0, 0, 0, 0, 1]
 #pl.Save_ref_test_csv("Test2_stats", Q, R, QR, QRS, RS, RSR)
 
 include("../src/Templates/QRS_true.jl")
-Tabel = zeros((2, 3))
+Tabel = zeros(Int, (2, 3) )
+
 [горизонталь, вертикаль]
 M1 = 1
 M2 = 3
@@ -134,3 +135,5 @@ C = "3"
 mm = findall(x->x==C, A)
 typeof(mm[1])
 trunc(Int, mm)
+
+floor(Int, 2.2)
