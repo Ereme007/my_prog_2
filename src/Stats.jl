@@ -12,7 +12,7 @@ module Stats
     function evaluation_classifiers(name, All_Templates, QRS_true, Numer_files)
         mass_name_templates = ["Q", "QR", "QRS", "RS", "R", "RSR", "-"] 
         Name_test, Q_ref, QR_ref,QRS_ref,RS_ref,R_ref,RSR_ref = [], [], [], [], [], [], []
-        Tabel = zeros((6, 6))
+        Tabel = zeros(Int, (6, 6))
         BaseName = "CSE"
         correct_res = 0
     
