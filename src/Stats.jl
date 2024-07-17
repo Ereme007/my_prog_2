@@ -52,7 +52,7 @@ module Stats
             R_ref = R_ref,
             RSR_ref = RSR_ref
         )
-        CSV.write("scripts/Stats/$(name).csv", text, delim = ';')
+        CSV.write("scripts/Stats2/$(name).csv", text, delim = ';')
         
         for i in 1:6
             correct_res = correct_res + Tabel[i, i]
