@@ -32,7 +32,7 @@ push!(MO, ["RS", "QR", "QR", "Q", "RS", "QR", "RS", "RS", "RS", "RS", "QR", "QR"
 push!(MO, ["R", "RS", "Q", "Q", "R", "Q", "Q", "Q", "Q", "RS", "RS", "R"])
 push!(MO, ["RS", "RS", "RS", "QR", "QR", "RS", "QR", "-", "RS", "RS", "RS", "RS"])
 push!(MO, ["RS", "R", "R", "Q", "Q", "R", "RS", "RS", "RS", "RS", "RS", "RS"])
-push!(MO, ["RS", "QR", "QR", "QR", "RS", "QR", "RS", "RS", "RS", "RS", "RS", "RS"])
+push!(MO, ["RS", "R", "QR", "QR", "RS", "QR", "RS", "RS", "RS", "RS", "RS", "RS"])
 push!(MO, ["R", "QRS", "QR", "QR", "R", "Q", "RS", "RS", "RS", "RS", "RS", "R"])
 push!(MO, ["RS", "RS", "QR", "Q", "RS", "R", "RS", "RS", "RS", "RS", "RS", "R"])
 push!(MO, ["QR", "RS", "RS", "QR", "QR", "RS", "RS", "RS", "QRS", "QRS", "QRS", "QR"])
