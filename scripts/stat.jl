@@ -56,13 +56,14 @@ ResultDTW2
 
 
 #Отрисовка классифицированного сигнала
-pl.plots_result(K, Signal, All_Templates)
-
+pl.plots_result(K, Pr_Signal, All_Templates)
+plot!(scope_More_Templates_CTS_RSR[1])
+plot!(scope_More_Templates_CTS_QRS[1])
 
 #Изначальный сегмент сигнала БЕЗ обработки
 plot(Signal, title = "Изначальный сигнал", label = false)
 
-#Сохраняем статистику (определён CSE база для 60ти сигналов по 12 отведений), первый параметр - имя файла. Сохраняется в папке Stats
-#pl.Save_csv("Test2", K, All_Templates)
+#Сохраняем статистику (определён CSE база для 60ти сигналов по 12 отведений), первый параметр - имя файла. Сохраняется в папке Stats rjl jghtltktybz if,jkjyjd gj htfkmysv 'ru
+pl.Save_csv("Test3", K, All_Templates)
 
 #Нормировка по средним квадратов ?! 
