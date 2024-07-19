@@ -209,5 +209,15 @@ module Plotting
         end
     end
 
-    export plot_templates, plots_result, Save_csv, Classificate_templates, create_name_signals, Save_ref_test_csv
+    function plots_dtw_test_sig(BaseName, Number, Channel, Templates)
+        Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseName, Number)
+        signal = rd.Processing_Signal(signals_channel[Channel][Ref_qrs[1]:Ref_qrs[2]])
+        ResultDTW, Temp_Signal = dtw.Result_DTW_with_signal(1, signal, Templates)
+    #@info "res_dtw = $ResultDTW"
+        p = (plot(Temp_Signal, color=:red, label="template");plot!(signal, color=:black, label="signal", title = "$ResultDTW: $Names_files, channel = $Channel "))
+        return p, Temp_Signal
+    end
+    
+
+    export plot_templates, plots_result, Save_csv, Classificate_templates, create_name_signals, Save_ref_test_csv, plots_dtw_test_sig
 end

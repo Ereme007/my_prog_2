@@ -252,9 +252,10 @@ Add_Templates_QR[1].name
 Un_Templates = Union_Templates(All_Templates, Add_Templates_QR)
 ResultDTW, _ = dtw.Result_DTW(K, signal, All_Templates)
 
-New_Tabel, res = st.evaluation_classifiers("Stats_QR1_templates", Un_Templates, QRS_true_2, 60)
+New_Tabel, res = st.evaluation_classifiers("Stats_QR1_templates", Un_Templates, QRS_true_2, 60, "False")
 
-
+#include("../src/Stats.jl")
+#import.Stats as st
 """
 Сохраним все сигналы, которые мы инетрпетируем как Q QR QRS RS R RSR
 """
@@ -285,7 +286,7 @@ Neww = Save_Templ(QRS_true_2, All_Templates)
 
 Un_Templates = Union_Templates(All_Templates, Neww)
 
-New_Tabel, res = st.evaluation_classifiers("ALL", Un_Templates, QRS_true_2, 60)
+New_Tabel, res = st.evaluation_classifiers("ALL", Un_Templates, QRS_true_2, 60, "False")
 
 
 Neww2 = Save_Templ(QRS_true_2, Un_Templates)
@@ -293,7 +294,7 @@ Neww2 = Save_Templ(QRS_true_2, Un_Templates)
 Un_Templates2 = Union_Templates(Un_Templates, Neww2)
 length(Un_Templates2)
 Un_Templates2[1:0]
-New_Tabel2, res = st.evaluation_classifiers("ALL", Un_Templates2, QRS_true_2, 60)
+New_Tabel2, res = st.evaluation_classifiers("ALL", Un_Templates2, QRS_true_2, 60, "False")
 
 #plot(Un_Templates2[1].signal)
 #Придумать программу, которая будет убирать темлейты и не изменяется тем самым результат
@@ -306,7 +307,7 @@ function CH(Temps)
  #    i = 10
         End_Temp = Temps[i+2:size]
         Union = Union_Templates(Bases, End_Temp)   
-        _, res = st.evaluation_classifiers("ALL", Union, QRS_true_2, 60)
+        _, res = st.evaluation_classifiers("ALL", Union, QRS_true_2, 60, "False")
     if res == RES
         COUNT_same = COUNT_same + 1
         @info "$(i+1)) Совпали = ($COUNT_same)"
@@ -328,10 +329,10 @@ Result_Templates
 ##
 ###@save "src/Test/Result_Templates.jld2" Result_Templates
 ##@load "src/Test/Result_Templates.jld2" Result_Templates
-#@save "src/Test/Result_Templates_3.jld2" Result_Templates
-@load "src/Test/Result_Templates_3.jld2" Result_Templates
+#@save "src/Test/Result_Templates_4.jld2" Result_Templates
+@load "src/Test/Result_Templates_4.jld2" Result_Templates
 Result_Templates
-_, res = st.evaluation_classifiers("Result_Templates", Result_Templates, QRS_true_2, 60)
+_, res = st.evaluation_classifiers("Result_Templates", Result_Templates, QRS_true_2, 60, "False")
 
 length(Result_Templates)
 mass_Q = []
@@ -355,13 +356,13 @@ for i in 1:length(Result_Templates)
         push!(mass_RSR, Result_Templates[i].signal)
     end
 end
-mass_RSR
+plot(mass_Q[1])
 
 BaseName = "CSE"
 using Plots
 plotly()
 
-si = mass_RS[48]; plot(si)
+si = mass_Q[1]; plot(si)
 ResultDTW, _ = dtw.Result_DTW(2, si, All_Templates)
 Space, Numb, Chan = 40, 0, 0
 for N in 1:60
@@ -376,7 +377,7 @@ Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseNa
     end
 end
 Numb,Chan
-Numb,Chan = 9, 1 #47  и 1
+#Numb,Chan = 55, 8 #47  и 1
 
 Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseName, Numb)
 test_signal = rd.Processing_Signal(signals_channel[Chan][Ref_qrs[1]:Ref_qrs[2]]); plot(test_signal)
@@ -447,68 +448,69 @@ plot(signal)
 
 
 function plots_signal_12_channels(BaseName, N, Result_Templates)
+    Space = 100
     Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseName, N)
     sig = rd.Processing_Signal(signals_channel[1][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    start_lvl = 2400
-    plot(signals12_level(sig, start_lvl - 300*1))
+    start_lvl = 5000
+    plot(signals12_level(sig, start_lvl - Space*1))
  
-    scatter!((1, start_lvl - 300*1), text=ResultDTW, color = "purple") 
+    scatter!((1, start_lvl - Space*1), text=ResultDTW, color = "purple") 
 
     sig = rd.Processing_Signal(signals_channel[2][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    plot!(signals12_level(sig, start_lvl - 300*2))
-    scatter!((1, start_lvl - 300*2), text=ResultDTW, color = "purple") 
+    plot!(signals12_level(sig, start_lvl - Space*2))
+    scatter!((1, start_lvl - Space*2), text=ResultDTW, color = "purple") 
 
     sig = rd.Processing_Signal(signals_channel[3][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    plot!(signals12_level(sig, start_lvl - 300*3))
-    scatter!((1, start_lvl - 300*3), text=ResultDTW, color = "purple") 
+    plot!(signals12_level(sig, start_lvl - Space*3))
+    scatter!((1, start_lvl - Space*3), text=ResultDTW, color = "purple") 
 
     sig = rd.Processing_Signal(signals_channel[4][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    plot!(signals12_level(sig, start_lvl - 300*4))
-    scatter!((1, start_lvl - 300*4), text=ResultDTW, color = "purple") 
+    plot!(signals12_level(sig, start_lvl - Space*4))
+    scatter!((1, start_lvl - Space*4), text=ResultDTW, color = "purple") 
 
     sig = rd.Processing_Signal(signals_channel[5][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    plot!(signals12_level(sig, start_lvl - 300*5))
-    scatter!((1, start_lvl - 300*5), text=ResultDTW, color = "purple") 
+    plot!(signals12_level(sig, start_lvl - Space*5))
+    scatter!((1, start_lvl - Space*5), text=ResultDTW, color = "purple") 
 
     sig = rd.Processing_Signal(signals_channel[6][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    plot!(signals12_level(sig, start_lvl - 300*6))
-    scatter!((1, start_lvl - 300*6), text=ResultDTW, color = "purple") 
+    plot!(signals12_level(sig, start_lvl - Space*6))
+    scatter!((1, start_lvl - Space*6), text=ResultDTW, color = "purple") 
 
     sig = rd.Processing_Signal(signals_channel[7][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    plot!(signals12_level(sig, start_lvl - 300*7))
-    scatter!((1, start_lvl - 300*7), text=ResultDTW, color = "purple") 
+    plot!(signals12_level(sig, start_lvl - Space*7))
+    scatter!((1, start_lvl - Space*7), text=ResultDTW, color = "purple") 
 
     sig = rd.Processing_Signal(signals_channel[8][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    plot!(signals12_level(sig, start_lvl - 300*8))
-    scatter!((1, start_lvl - 300*8), text=ResultDTW, color = "purple") 
+    plot!(signals12_level(sig, start_lvl - Space*8))
+    scatter!((1, start_lvl - Space*8), text=ResultDTW, color = "purple") 
 
     sig = rd.Processing_Signal(signals_channel[9][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    plot!(signals12_level(sig, start_lvl - 300*9))
-    scatter!((1, start_lvl - 300*9), text=ResultDTW, color = "purple") 
+    plot!(signals12_level(sig, start_lvl - Space*9))
+    scatter!((1, start_lvl - Space*9), text=ResultDTW, color = "purple") 
 
     sig = rd.Processing_Signal(signals_channel[10][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    plot!(signals12_level(sig, start_lvl - 300*10))
-    scatter!((1, start_lvl - 300*10), text=ResultDTW, color = "purple") 
+    plot!(signals12_level(sig, start_lvl - Space*10))
+    scatter!((1, start_lvl - Space*10), text=ResultDTW, color = "purple") 
 
     sig = rd.Processing_Signal(signals_channel[11][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    plot!(signals12_level(sig, start_lvl - 300*11))
-    scatter!((1, start_lvl - 300*11), text=ResultDTW, color = "purple") 
+    plot!(signals12_level(sig, start_lvl - Space*11))
+    scatter!((1, start_lvl - Space*11), text=ResultDTW, color = "purple") 
 
     sig = rd.Processing_Signal(signals_channel[12][Ref_qrs[1]:Ref_qrs[2]])
     ResultDTW, _ = dtw.Result_DTW(1, sig, Result_Templates)
-    plot!(signals12_level(sig, start_lvl - 300*12))
-    scatter!((1, start_lvl - 300*12), text=ResultDTW, color = "purple") 
+    plot!(signals12_level(sig, start_lvl - Space*12))
+    scatter!((1, start_lvl - Space*12), text=ResultDTW, color = "purple") 
     plot!(title = Names_files)
 end
 plots_signal_12_channels("CSE", 1, Result_Templates)
@@ -548,7 +550,7 @@ Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseNa
     end
 end
 Numb,Chan
-#Numb,Chan = 9, 1 #47  и 1
+Numb,Chan = 2, 12 #47  и 1
 
 Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseName, Numb)
 test_signal = rd.Processing_Signal(signals_channel[Chan][Ref_qrs[1]:Ref_qrs[2]]); plot(test_signal)
@@ -557,8 +559,17 @@ ResultDTW, _ = dtw.Result_DTW(K, test_signal, Result_Templates)
 
 
 
-#===Сплошное тестирвоание===#
 
+function plots_dtw_test_sig2(BaseName, Number, Channel, Templates)
+    Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseName, Number)
+    signal = rd.Processing_Signal(signals_channel[Channel][Ref_qrs[1]:Ref_qrs[2]])
+    ResultDTW, Temp_Signal = dtw.Result_DTW_with_signal(1, signal, Templates)
+@info "res_dtw = $ResultDTW"
+    p = (plot(Temp_Signal, color=:red, label="template");plot!(signal, color=:black, label="signal", title = "$ResultDTW: $Names_files, channel = $Channel "))
+    return p, Temp_Signal
+end
+
+#===Сплошное тестирвоание===#
 include("../src/Readers.jl")
 import .Readers as rd
 include("../src/DTWfunc.jl")
@@ -567,14 +578,75 @@ include("../src/Plotting.jl")
 import .Plotting as pl
 include("../src/Stats.jl")
 import.Stats as st
+@load "src/Templates/All_Templates_map.jld2" All_Templates #шаблоны из CTS
 include("../src/Templates/QRS_true_NEW2.jl"); QRS_true = MO_22 #Корректная разметка
-@load "src/Test/Result_Templates_3.jld2" Result_Templates ; Result_Temps = Result_Templates[4:192]#Корректный набор шаблонов от 4:192
+function SAVE_temps(Temps, REF_QRS, RES)
+    #RES = 678 
+    size = length(Temps)
+    Bases = []
+    COUNT_same, COUNT_nosame = 0, 0
+ for i in 0:(size-1)
+ #    i = 10
+        End_Temp = Temps[i+2:size]
+        Union = Union_Templates(Bases, End_Temp)   
+        _, res = st.evaluation_classifiers("ALL", Union, REF_QRS, 60, "False")
+    if res == RES
+        COUNT_same = COUNT_same + 1
+        @info "$(i+1)) Совпали = ($COUNT_same)"
+    else
+        COUNT_nosame = COUNT_nosame + 1
+        @info "$(i+1)) Не совпали = ($COUNT_nosame)"
+        push!(Bases, Template(Temps[i+1].name, Temps[i+1].signal)) 
+    end
+    i = i+1
+end
+
+return Bases
+end
+
+Neww = Save_Templ(QRS_true, All_Templates)
+Un_Templates = Union_Templates(All_Templates, Neww)
+New_Tabel, res = st.evaluation_classifiers("ALL", Un_Templates, QRS_true, 60, "False")
+
+Neww2 = Save_Templ(QRS_true, Un_Templates)
+Un_Templates2 = Union_Templates(Un_Templates, Neww2)
+length(Un_Templates2)
+New_Tabel2, res = st.evaluation_classifiers("ALL", Un_Templates2, QRS_true, 60, "False")
+res
+BB = SAVE_temps(Un_Templates2, QRS_true, res)
+Result_Templates = BB
+#@save "src/Test/Result_Templates_5.jld2" Result_Templates
+@load "src/Test/Result_Templates_5.jld2" Result_Templates ; Result_Templates#их 189
+
+length(Result_Templates)
+mass_Q = []
+mass_QR = []
+mass_QRS = []
+mass_RS = []
+mass_R = []
+mass_RSR = []
+for i in 1:length(Result_Templates)
+    if Result_Templates[i].name == "Q"
+        push!(mass_Q, Result_Templates[i].signal)
+    elseif Result_Templates[i].name == "QR"
+        push!(mass_QR, Result_Templates[i].signal)
+    elseif Result_Templates[i].name == "QRS"
+        push!(mass_QRS, Result_Templates[i].signal)
+    elseif Result_Templates[i].name == "RS"
+        push!(mass_RS, Result_Templates[i].signal)
+    elseif Result_Templates[i].name == "R"
+        push!(mass_R, Result_Templates[i].signal)
+    elseif Result_Templates[i].name == "RSR"
+        push!(mass_RSR, Result_Templates[i].signal)
+    end
+end
+
+#Это шаблоны из базы CSE в количестве 
 #Всего сигналов 679
+#Просиходит сохранение ("True" - то сохранится, если другое - не сохранится)
+New_Tabel, res = st.evaluation_classifiers("Save_11_Templates", All_Templates, QRS_true, 60, "True")
 
-#Просиходит сохранение
-#New_Tabel2, res2 = st.evaluation_classifiers("Save", Result_Temps, QRS_true, 60)
-
-#Где возникают ошибки? определим фкнуцию 
+#Где возникают ошибки? определим функцию 
 function Ch_Res(Templates, ref_comlex_qrs)
     scripts_plot = []
 
@@ -582,7 +654,7 @@ function Ch_Res(Templates, ref_comlex_qrs)
     Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseName, N)
     for Channel in 1:12
         signal = rd.Processing_Signal(signals_channel[Channel][Ref_qrs[1]:Ref_qrs[2]]) 
-        ResultDTW, _ = dtw.Result_DTW(1, signal, Templates)
+        ResultDTW, _ = dtw.Result_DTW_with_signal(1, signal, Templates)
         if ref_comlex_qrs[N][Channel] != ResultDTW && ref_comlex_qrs[N][Channel] != "-"
             @info "N = $N, Channel = $Channel"
             @info "ref_comlex_qrs[N][Channel] = $(ref_comlex_qrs[N][Channel]) and ResultDTW = $(ResultDTW)"
@@ -593,6 +665,56 @@ end
 return scripts_plot
 end
 
-i = Ch_Res(Result_Temps, QRS_true)
+i = Ch_Res(Result_Templates, QRS_true)
 
-i[4]
+
+Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseName, 47)
+signal = rd.Processing_Signal(signals_channel[1][Ref_qrs[1]:Ref_qrs[2]]) 
+ResultDTW, _ = dtw.Result_DTW(2, signal, Result_Templates)
+
+QRS_true[47][1]
+i[1]
+i[2]
+
+
+plots_signal_12_channels("CSE", 1, Result_Templates)
+
+
+s1, sis1 = pl.plots_dtw_test_sig("CSE", 31, 4, Result_Templates)
+s1
+QRS_true[31][4]
+#s2, sis2 = pl.plots_dtw_test_sig("CSE", 47, 1, All_Templates)
+QRS_true[47][1]
+s1
+mass_Q
+plot(mass_Q[11])
+
+si = mass_QR[9]; plot(si)
+Space, Numb, Chan = 40, 0, 0
+for N in 1:60
+Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseName, N)
+    for Ch in 1:12 
+    test_signal = rd.Processing_Signal(signals_channel[Ch][Ref_qrs[1]:Ref_qrs[2]])
+        if test_signal == si
+            @info "N = $N and Ch = $Ch"
+            Numb = N
+            Chan = Ch
+        end
+    end
+end
+
+Names_files, signals_channel, Frequency, Ref_qrs = rd.Signal_all_channels(BaseName, 15)
+Space = 100
+
+plot(signals_channel[3][Ref_qrs[1]-Space:Ref_qrs[2]+Space]); vline!([Space, Ref_qrs[2]-Ref_qrs[1]+Space])
+
+
+mass_Q
+mass_QR
+mass_QRS
+mass_RS
+mass_R
+mass_RSR
+
+
+plot(mass_QR[6:10])

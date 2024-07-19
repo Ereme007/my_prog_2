@@ -9,7 +9,7 @@ module Stats
     
     @load "src/Templates/All_Templates_map.jld2" All_Templates
     
-    function evaluation_classifiers(name, All_Templates, QRS_true, Numer_files)
+    function evaluation_classifiers(name, All_Templates, QRS_true, Numer_files, Flag)
         mass_name_templates = ["Q", "QR", "QRS", "RS", "R", "RSR", "-"] 
         Name_test, Q_ref, QR_ref,QRS_ref,RS_ref,R_ref,RSR_ref = [], [], [], [], [], [], []
         Tabel = zeros(Int, (6, 6))
@@ -42,6 +42,7 @@ module Stats
             push!(R_ref, Tabel[i, 5])
             push!(RSR_ref,Tabel[i, 6]) 
         end
+        if Flag == "True"
 
         text = DataFrame(
             name_TEST = Name_test,
@@ -53,7 +54,7 @@ module Stats
             RSR_ref = RSR_ref
         )
         CSV.write("scripts/Stats2/$(name).csv", text, delim = ';')
-        
+        end
         for i in 1:6
             correct_res = correct_res + Tabel[i, i]
         
