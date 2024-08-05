@@ -58,4 +58,3 @@ MO_22 = []; push!(MO_22, ["RS", "RS", "RSR", "QR", "QRS", "RS", "QRS", "RS", "RS
 ["RS", "RS", "QR", "QR", "RS", "RS", "RS", "RS", "RS", "RS", "RS", "R"],
 ["RS", "QRS", "R", "QR", "RS", "R", "-", "RS", "RS", "RS", "QRS", "QRS"],
 ["RS", "QRS", "QR", "Q", "-", "R", "RS", "RS", "RS", "QRS", "QR", "R"])
-MO_2
